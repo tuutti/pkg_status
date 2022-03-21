@@ -1,0 +1,16 @@
+services:
+  plugin.manager.pkg_status_package_type:
+    class: Drupal\pkg_status\PackageTypePluginManager
+    parent: default_plugin_manager
+
+  pkg_status.package_source.composer.collector:
+    class: Drupal\pkg_status\PackageSource\Composer\Collector
+    arguments: []
+    tags:
+      - { name: service_collector, call: add, tag: pkg_status.package_source.composer }
+
+  pkg_status.package_source.composer.packagist:
+    class: Drupal\pkg_status\PackageSource\Composer\Packagist
+    arguments: ['@http_client']
+    tags:
+      - { name: pkg_status.package_source.composer }

@@ -1,0 +1,17 @@
+{
+    "name": "drupal/pkg_status",
+    "type": "drupal-module",
+    "description": "Package status collector",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.1",
+        "drupal/entity": "^1.0",
+        "t4web/composer-lock-parser": "^1.0"
+    },
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+        "drupal/coder": "^8.3",
+        "donatj/mock-webserver": "dev-master"
+    }
+}
