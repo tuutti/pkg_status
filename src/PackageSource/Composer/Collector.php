@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\pkg_status\PackageSource\Composer;
 
-use Drupal\pkg_status\Entity\PackageInterface;
+use Drupal\pkg_status\Entity\Package\PackageInterface;
 
 /**
  * The composer version source collector.
@@ -30,6 +30,7 @@ final class Collector {
       }
       return $source->get($package);
     }
+    return [];
   }
 
 }

@@ -2,7 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\pkg_status\Entity;
+namespace Drupal\pkg_status\Entity\Package;
+
+use Drupal\pkg_status\Entity\SupportsNotificationUrlInterface;
+use Drupal\pkg_status\Entity\SupportsSourceInterface;
 
 /**
  * The composer package bundle class.

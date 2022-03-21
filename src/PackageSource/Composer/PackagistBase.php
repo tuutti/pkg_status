@@ -7,8 +7,8 @@ namespace Drupal\pkg_status\PackageSource\Composer;
 use Composer\Semver\Semver;
 use Composer\Semver\VersionParser;
 use Drupal\pkg_status\DTO\Version;
-use Drupal\pkg_status\Entity\PackageInterface;
-use Drupal\pkg_status\Entity\Status;
+use Drupal\pkg_status\Entity\Package\PackageInterface;
+use Drupal\pkg_status\Entity\Package\Status;
 use Drupal\pkg_status\Exception\InvalidPackageException;
 use Drupal\pkg_status\PackageSource\SupportsSecurityAdvisoriesInterface;
 use GuzzleHttp\ClientInterface;
@@ -34,7 +34,7 @@ abstract class PackagistBase implements ComposerPackageInterface {
    * This should return two URLs, one for stable releases and one for
    * dev releases.
    *
-   * @param array $package
+   * @param \Drupal\pkg_status\Entity\Package\PackageInterface $package
    *   The package data.
    *
    * @return array
@@ -71,7 +71,7 @@ abstract class PackagistBase implements ComposerPackageInterface {
   /**
    * Gets the version keys.
    *
-   * @param \Drupal\pkg_status\Entity\PackageInterface $package
+   * @param \Drupal\pkg_status\Entity\Package\PackageInterface $package
    *   The package.
    *
    * @return array
@@ -82,7 +82,7 @@ abstract class PackagistBase implements ComposerPackageInterface {
 
     foreach ($this->getUrls($package) as $url) {
       $items = $this->getHttpResponse($url, function (array $data) {
-        return isset($data['packages']) ? reset($data['packages']) : [];
+        return !empty($data['packages']) ? reset($data['packages']) : [];
       });
 
       foreach ($items as $item) {
@@ -95,7 +95,7 @@ abstract class PackagistBase implements ComposerPackageInterface {
   /**
    * Gets the package versions.
    *
-   * @param \Drupal\pkg_status\Entity\PackageInterface $package
+   * @param \Drupal\pkg_status\Entity\Package\PackageInterface $package
    *   The package name.
    *
    * @return \Drupal\pkg_status\DTO\Version[]

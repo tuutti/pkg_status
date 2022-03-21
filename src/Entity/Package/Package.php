@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\pkg_status\Entity;
+namespace Drupal\pkg_status\Entity\Package;
 
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedInterface;
@@ -24,7 +24,7 @@ use Drupal\pkg_status\Plugin\Field\FieldType\VersionItem;
  *   handlers = {
  *     "access" = "Drupal\entity\EntityAccessControlHandler",
  *     "permission_provider" = "Drupal\entity\EntityPermissionProvider",
- *     "storage" = "Drupal\pkg_status\Entity\PackageStorage",
+ *     "storage" = "Drupal\pkg_status\Entity\Package\PackageStorage",
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
@@ -42,7 +42,7 @@ use Drupal\pkg_status\Plugin\Field\FieldType\VersionItem;
  *   field_ui_base_route = "entity.pkg_status_package.edit_form"
  * )
  */
-class Package extends ContentEntityBase implements EntityChangedInterface {
+class Package extends ContentEntityBase implements EntityChangedInterface, PackageInterface {
 
   use EntityChangedTrait;
 
@@ -120,6 +120,11 @@ class Package extends ContentEntityBase implements EntityChangedInterface {
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
+
+    $fields['name'] = BaseFieldDefinition::create('string')
+      ->setLabel(new TranslatableMarkup('Package name'))
+      ->setRequired(TRUE)
+      ->setReadOnly(TRUE);
 
     $fields['version'] = BaseFieldDefinition::create('pkg_status_version')
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)

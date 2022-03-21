@@ -7,7 +7,7 @@ namespace Drupal\pkg_status\Plugin\PackageType;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\entity\BundleFieldDefinition;
-use Drupal\pkg_status\Entity\PackageInterface;
+use Drupal\pkg_status\Entity\Package\PackageInterface;
 use Drupal\pkg_status\PackageSource\Composer\Collector;
 use Drupal\pkg_status\PackageTypePluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;

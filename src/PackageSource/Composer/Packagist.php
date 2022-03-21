@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace Drupal\pkg_status\PackageSource\Composer;
 
 use Composer\Semver\Semver;
-use Drupal\pkg_status\Entity\ComposerPackage;
-use Drupal\pkg_status\Entity\PackageInterface;
-use Drupal\pkg_status\Entity\Status;
+use Drupal\pkg_status\Entity\Package\PackageInterface;
+use Drupal\pkg_status\Entity\Package\Status;
+use Drupal\pkg_status\Entity\SupportsNotificationUrlInterface;
 use Drupal\pkg_status\PackageSource\SupportsSecurityAdvisoriesInterface;
 
 /**
@@ -26,13 +26,13 @@ final class Packagist extends PackagistBase implements SupportsSecurityAdvisorie
    * {@inheritdoc}
    */
   public function applies(PackageInterface $package): bool {
-    if (!$package instanceof ComposerPackage) {
+    if (
+      !$package instanceof SupportsNotificationUrlInterface ||
+      !$package->hasNotificationUrl()
+    ) {
       return FALSE;
     }
-    if (str_starts_with($package->getNotificationUrl(), 'https://packagist.org')) {
-      return TRUE;
-    }
-    return FALSE;
+    return str_starts_with($package->getNotificationUrl(), 'https://packagist.org');
   }
 
   /**
@@ -40,8 +40,8 @@ final class Packagist extends PackagistBase implements SupportsSecurityAdvisorie
    */
   protected function getUrls(PackageInterface $package): array {
     return [
-      sprintf('https://repo.packagist.org/p2/%s.json', $package['name']),
-      sprintf('https://repo.packagist.org/p2/%s~dev.json', $package['name']),
+      sprintf('https://repo.packagist.org/p2/%s.json', $package->getName()),
+      sprintf('https://repo.packagist.org/p2/%s~dev.json', $package->getName()),
     ];
   }
 
@@ -54,9 +54,9 @@ final class Packagist extends PackagistBase implements SupportsSecurityAdvisorie
   ): array {
     $advisories = $this
       ->getHttpResponse(
-        sprintf('https://packagist.org/api/security-advisories/?packages[]=%s', $package['name']),
+        sprintf('https://packagist.org/api/security-advisories/?packages[]=%s', $package->getName()),
         function (array $data) {
-          return isset($data['advisories']) ? reset($data['advisories']) : [];
+          return !empty($data['advisories']) ? reset($data['advisories']) : [];
         });
 
     foreach ($versions as $version) {

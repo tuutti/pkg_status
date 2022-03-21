@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\pkg_status\PackageSource\Composer;
 
-use Drupal\pkg_status\Entity\ComposerPackage;
-use Drupal\pkg_status\Entity\PackageInterface;
+use Drupal\pkg_status\Entity\Package\ComposerPackage;
+use Drupal\pkg_status\Entity\Package\PackageInterface;
 
 /**
  * The custom packagist package source.
@@ -26,17 +26,14 @@ final class PackagistCustom extends PackagistBase {
     if (!$package instanceof ComposerPackage) {
       return FALSE;
     }
-    if ($package->hasSource()) {
-      return TRUE;
-    }
-    return FALSE;
+    return $package->hasSource();
   }
 
   /**
    * {@inheritdoc}
    */
   protected function getUrls(PackageInterface $package): array {
-    /** @var \Drupal\pkg_status\Entity\ComposerPackage $package */
+    /** @var \Drupal\pkg_status\Entity\Package\ComposerPackage $package */
     return [
       sprintf('%s/p2/%s.json', $package->getSource(), $package->getName()),
       sprintf('%s/p2/%s~dev.json', $package->getSource(), $package->getName()),

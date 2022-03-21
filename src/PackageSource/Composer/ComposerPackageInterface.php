@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\pkg_status\PackageSource\Composer;
 
-use Drupal\pkg_status\Entity\PackageInterface;
+use Drupal\pkg_status\Entity\Package\PackageInterface;
 
 /**
  * Defines the composer package interface.
@@ -14,7 +14,7 @@ interface ComposerPackageInterface {
   /**
    * Checks whether this collector is applicable.
    *
-   * @param \Drupal\pkg_status\Entity\PackageInterface $package
+   * @param \Drupal\pkg_status\Entity\Package\PackageInterface $package
    *   The package to check.
    *
    * @return bool
@@ -33,7 +33,7 @@ interface ComposerPackageInterface {
   /**
    * Gets the version data.
    *
-   * @param \Drupal\pkg_status\Entity\PackageInterface $package
+   * @param \Drupal\pkg_status\Entity\Package\PackageInterface $package
    *   The package.
    *
    * @throws \Drupal\pkg_status\Exception\InvalidPackageException
