@@ -18,6 +18,16 @@ final class Collector {
    */
   private array $sources = [];
 
+  /**
+   * Gets the sources.
+   *
+   * @return \Drupal\pkg_status\PackageSource\Composer\ComposerPackageInterface[]
+   *   The sources.
+   */
+  public function getSources() : array {
+    return $this->sources;
+  }
+
   public function add(ComposerPackageInterface $source) : self {
     $this->sources[] = $source;
     return $this;

@@ -6,6 +6,9 @@ namespace Drupal\pkg_status\Entity\Site;
 
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\user\EntityOwnerInterface;
 use Drupal\user\EntityOwnerTrait;
 
@@ -62,7 +65,28 @@ final class Site extends ContentEntityBase implements EntityOwnerInterface {
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) : array {
     $fields = parent::baseFieldDefinitions($entity_type);
-    $fields += static::ownerBaseFieldDefinitions($entity_type);
+    $fields += self::ownerBaseFieldDefinitions($entity_type);
+
+    $fields['package_endpoint'] = BaseFieldDefinition::create('link')
+      ->setCardinality(1)
+      ->setLabel(new TranslatableMarkup('Package endpoint'))
+      ->setDescription(new TranslatableMarkup('The API endpoint of your package data'))
+      ->setSettings([
+        'max_length' => 512,
+      ]);
+
+    $fields['packages'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(new TranslatableMarkup('Packages'))
+      ->setSettings([
+        'target_type' => 'pkg_status_package',
+      ])
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['status'] = BaseFieldDefinition::create('string')
+      ->setLabel(new TranslatableMarkup('Site status'))
+      ->setRequired(TRUE);
 
     return $fields;
   }

@@ -6,7 +6,9 @@ namespace Drupal\pkg_status\PackageSource\Composer;
 
 use Composer\Semver\Semver;
 use Composer\Semver\VersionParser;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\pkg_status\DTO\Version;
+use Drupal\pkg_status\Entity\Package\ComposerPackage;
 use Drupal\pkg_status\Entity\Package\PackageInterface;
 use Drupal\pkg_status\Entity\Package\Status;
 use Drupal\pkg_status\Exception\InvalidPackageException;
@@ -27,6 +29,14 @@ abstract class PackagistBase implements ComposerPackageInterface {
    */
   public function __construct(private ClientInterface $client) {
   }
+
+  /**
+   * The package source label.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   The label.
+   */
+  abstract public function label() : TranslatableMarkup;
 
   /**
    * Gets the package urls.
@@ -66,6 +76,18 @@ abstract class PackagistBase implements ComposerPackageInterface {
     catch (GuzzleException) {
     }
     return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function applies(PackageInterface $package): bool {
+    if (
+      !$package instanceof ComposerPackage
+    ) {
+      return FALSE;
+    }
+    return $package->hasSource() && $package->getSource() === $this->id();
   }
 
   /**

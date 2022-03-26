@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace Drupal\pkg_status\PackageSource\Composer;
 
 use Composer\Semver\Semver;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\pkg_status\Entity\Package\PackageInterface;
 use Drupal\pkg_status\Entity\Package\Status;
-use Drupal\pkg_status\Entity\SupportsNotificationUrlInterface;
 use Drupal\pkg_status\PackageSource\SupportsSecurityAdvisoriesInterface;
 
 /**
@@ -25,14 +25,8 @@ final class Packagist extends PackagistBase implements SupportsSecurityAdvisorie
   /**
    * {@inheritdoc}
    */
-  public function applies(PackageInterface $package): bool {
-    if (
-      !$package instanceof SupportsNotificationUrlInterface ||
-      !$package->hasNotificationUrl()
-    ) {
-      return FALSE;
-    }
-    return str_starts_with($package->getNotificationUrl(), 'https://packagist.org');
+  public function label() : TranslatableMarkup {
+    return new TranslatableMarkup('Packagist');
   }
 
   /**

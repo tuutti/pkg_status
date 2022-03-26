@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\pkg_status\PackageSource\Composer;
 
-use Drupal\pkg_status\Entity\Package\ComposerPackage;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\pkg_status\Entity\Package\PackageInterface;
 
 /**
@@ -22,11 +22,8 @@ final class PackagistCustom extends PackagistBase {
   /**
    * {@inheritdoc}
    */
-  public function applies(PackageInterface $package): bool {
-    if (!$package instanceof ComposerPackage) {
-      return FALSE;
-    }
-    return $package->hasSource();
+  public function label() : TranslatableMarkup {
+    return new TranslatableMarkup('Packagist (custom)');
   }
 
   /**
